@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Developers</title>
+    
+  
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,500italic,700,700italic|Roboto+Mono:400,700|Material+Icons"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://google-developers.appspot.com/_static/183119937e/css/devsite-cyan.css?hl=ko">
+    <script src="https://google-developers.appspot.com/_static/183119937e/js/prettify-bundle.js?hl=ko"></script>
+  
+
+    <meta name="robots" content="noindex">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://google-developers.appspot.com/_static/183119937e/js/jquery_ui-bundle.js?hl=ko"></script>
+    <script src="//www.google.com/jsapi?key=AIzaSyCZfHRnq7tigC-COeQRmoa9Cxr0vbrK6xw&hl=ko"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" ></script>
+    <script src="https://google-developers.appspot.com/_static/183119937e/js/framebox.js?hl=ko"></script>
+  </head>
+  <body class="devsite-layout-docs devsite-framebox">
+<p style="display: none; height: 0; width: 0">This is a snippet from developers.google.com</p>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<div align=center id="dashboard_div" style="border: 1px solid #ccc; margin-top: 1em">
+  <p style="padding-left: 1em"><strong>Sensor View</strong></p>
+  <table class="columns">
+    <tr>
+      <td>
+       <div  id="control_div" ></div>
+      </td><td>
+        <div id="categoryPicker_div"></div>
+      </td>
+    </tr><tr>
+      <td>
+        <div id="chart_div" style="padding-top: 15px"></div>
+
+      </td><td>
+        <div id="table_div" style="padding-top: 30px"></div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/javascript">
+ 
+function charts(data)
+{
+
+var d=data;
+
+  google.charts.load('current', {'packages':['corechart', 'table', 'gauge', 'controls']});
+  google.charts.setOnLoadCallback(drawMainDashboard);
+
+  function drawMainDashboard() {
+    
+   // var d=data;
+    var dashboard = new google.visualization.Dashboard(
+        document.getElementById('dashboard_div'));
+   // var slider = new google.visualization.ControlWrapper({
+     // 'controlType': 'NumberRangeFilter',
+     // 'containerId': 'slider_div',
+     // 'options': {
+     //   'filterColumnIndex': 0,
+     //   'ui': {
+     //     'labelStacking': 'vertical',
+     //     'label': 'Time Filter:'
+     //   }
+     // }
+   // });
+    var categoryPicker = new google.visualization.ControlWrapper({
+      'controlType': 'CategoryFilter',
+      'containerId': 'categoryPicker_div',
+      'options': {
+        'filterColumnIndex': 1,
+        'ui': {
+          'labelStacking': 'vertical',
+          'label': 'Sensor Selection:',
+          'allowTyping': false,
+          'allowMultiple': false
+        }
+      }
+    });
+
+  var myDateSlider = new google.visualization.ControlWrapper({
+    'controlType': 'ChartRangeFilter',
+    'containerId': 'control_div',
+    'options': {
+      'filterColumnIndex': 0
+    }
+  });
+
+
+
+
+    var line = new google.visualization.ChartWrapper({
+      'chartType': 'LineChart',
+      'containerId': 'chart_div',
+      'options': {
+        'width': 1000,
+        'height': 500,
+        'legend': 'none',
+       // 'chartArea': {'left': 15, 'top': 15, 'right': 0, 'bottom': 0},
+        //'pieSliceText': 'label'
+      },
+      'view': {'columns': [0,2,3,4,5]}
+    });
+    var table = new google.visualization.ChartWrapper({
+      'chartType': 'Table',
+      'containerId': 'table_div',
+      'options': {
+      }
+    });
+    var data = new google.visualization.DataTable();
+    
+data.addColumn('datetime','created_at');
+data.addColumn('number','device');
+data.addColumn('number','temper');
+data.addColumn('number','humidity');
+data.addColumn('number','led')
+data.addColumn('number','light')
+$.each(d, function(i,d)
+{
+var b=d.temp;
+var b=Number(b);
+var g=d.humidity;
+var g=Number(g);
+var y=d.created_at;
+var k=new Date(y);
+var z=d.device;
+var z=Number(z);
+var j=d.led;
+var j=Number(j);
+var l=d.light;
+var l=Number(l);
+data.addRows([[k, z, b, g, j,l]]);
+   });
+    dashboard.bind([categoryPicker], [line, table]);
+    dashboard.bind(myDateSlider, line );
+    dashboard.draw(data);
+  }};
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" ></script>
+<script src="http://demos.9lessons.info/googleCharts/dist/js/ajaxGetPost.js" ></script>
+<script src="https://www.google.com/jsapi"></script>
+<script>
+$(document).ready(function () 
+{
+url='data.json'; // API URL
+ajax_data('GET',url, function(data)
+{
+charts(data);
+//charts(data,"categoryPicker");
+//charts(data,"table");
+//charts(data);
+});
+});
+ //};
+</script>
+
+    
+
+
+  
+  </body>
+</html>
